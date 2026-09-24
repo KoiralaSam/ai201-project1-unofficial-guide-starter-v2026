@@ -15,7 +15,7 @@ env/
 # Local vector store — rebuilt by `python app.py index`
 chroma_db/
 chroma/
-
+*.ses
 # Cached model responses
 .cache/
 
