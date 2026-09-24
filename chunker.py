@@ -118,3 +118,17 @@ if __name__ == "__main__":
 
     chunks = split_documents(load_documents())
     print(describe(chunks))
+
+
+def max_corpus_characters() -> int:
+    """Return the character count of the longest file in campus_life/documents."""
+    folder = config.corpus_path("campus_life")
+    longest = 0
+    for path in folder.iterdir():
+        if not path.is_file():
+            continue
+        n = len(path.read_text(encoding="utf-8"))
+        if n > longest:
+            longest = n
+    return longest
+
