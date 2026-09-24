@@ -90,46 +90,42 @@ Laundry costs $1.75 wash, $1.75 dry, app-based. On noise: moderate; the building
 
 ## Sample Answer
 
-<!-- One complete question and answer, pasted as text, with the source line
-     visible. Milestone 4. -->
-
-**Question:**
+**Question:** When do you declare your major?
 
 **Answer:**
 
 ```
+  (best distance 0.283, cutoff 0.5)
 
+You declare your major at the end of your second semester, or later if you need to (admin_declaring_a_major.txt).
+
+Sources retrieved: admin_declaring_a_major.txt, admin_graduation_requirements.txt, admin_pass_fail_option.txt
 ```
 
-**My relevance cutoff:**
+An off-topic question (`What is the capital of Mongolia?`) hits best distance 0.825 and the gate returns: I don't have enough information about that.
 
-<!-- The number you set in config.py, and how you got there.
+**My relevance cutoff:** 0.50 (`THRESHOLD` in `config.py`)
 
-     You ran five questions your corpus covers and the five in OUT_OF_SCOPE
-     that it clearly doesn't, and wrote down the best distance for each. What
-     did those two groups look like? Where was the gap? Put the actual numbers
-     here — the table below wants all ten rows.
-
-     Milestone 4. -->
+In-corpus best distances sat between 0.23 and 0.36. Out-of-scope best distances sat between 0.82 and 0.93. The gap is about 0.36 to 0.82. I put the cutoff at 0.50, in that gap: low enough to refuse Mongolia / diesel / World Cup, high enough that the interlibrary question (0.36) still passes. 0.30 would have been too tight; 0.80 would have been too loose.
 
 | Question | In corpus? | Best distance |
 | -------- | ---------- | ------------- |
-|          |            |               |
+| When is the last day to drop your course without getting a 'W'? | yes | 0.2782 |
+| When do you declare your major? | yes | 0.2826 |
+| When does the book arrive when ordered through interlibrary system? | yes | 0.3623 |
+| When do student permits on west lots usually sell out? | yes | 0.2332 |
+| When do the study abroad applications open up? | yes | 0.2347 |
+| What is the capital of Mongolia? | no | 0.8246 |
+| How do I change the oil in a diesel engine? | no | 0.9340 |
+| Who won the 1994 World Cup? | no | 0.8859 |
+| What is the recommended dosage of ibuprofen for a headache? | no | 0.8442 |
+| How do I write a for loop in Rust? | no | 0.8960 |
 
 ## How I Used AI
 
-<!-- Two specific moments. For each: what you asked for, what came back, and
-     what you changed about it.
+**1.** I asked why `split_documents` and `fallback_split` were the same if I only changed `CHUNK_SIZE` in `config.py`, then told it to write `split_documents` for `campus_life`. It came back with one file = one chunk, overlap 0, and `produced_by="chunker.py::split_documents"` — no sliding window. I asked why that function does not check character counts. I kept it that way: the 550-character ceiling is a decision from `max_corpus_characters()`, not a second cutter inside the loop.
 
-     "I asked Claude to write the chunking function from my notes. It ignored
-     the overlap, so I added that myself" is the level of detail we're after.
-     "I used AI to help me code" is not.
-
-     Milestone 5. -->
-
-**1.**
-
-**2.**
+**2.** I asked it to write the README “What This Does” blurb from my five test questions, and later to draft criterion 5 (“chunks are a complete thought”). It gave a 4-of-5 standalone-chunk target and a four-sentence corpus description. I used both, but I put the criterion in my own words and I left the “why” as comments in `criteria.md` until I was sure. For Milestone 4 I asked it to fill the sample answer from the same five in-corpus / five out-of-scope questions; I kept cutoff 0.50 after I saw the 0.23–0.36 vs 0.82–0.93 gap, instead of taking 0.60 just because the starter shipped with it.
 
 <!-- ── Stretch features ─────────────────────────────────────────────────────
      Doing one? Say so here BEFORE you start. A feature this README never
