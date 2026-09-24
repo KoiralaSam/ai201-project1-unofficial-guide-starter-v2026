@@ -49,3 +49,27 @@ OUT_OF_SCOPE = [
 def answered() -> list[dict]:
     """The questions you've actually filled in."""
     return [q for q in QUESTIONS if q.get("question", "").strip()]
+
+
+def print_distance_groups() -> None:
+    """Print best distance for five in-corpus questions and five that are not.
+
+    Milestone 4: the cutoff in config.THRESHOLD goes in the gap between
+    these two groups. Retrieval only — no model call.
+    """
+    from store import search
+
+    print(f"{'Question':<72} {'In corpus?':<12} Best distance")
+    print("-" * 100)
+    for item in answered():
+        results = search(item["question"])
+        best = results[0].distance if results else 1.0
+        print(f"{item['question']:<72} {'yes':<12} {best:.4f}")
+    for question in OUT_OF_SCOPE:
+        results = search(question)
+        best = results[0].distance if results else 1.0
+        print(f"{question:<72} {'no':<12} {best:.4f}")
+
+
+if __name__ == "__main__":
+    print_distance_groups()
